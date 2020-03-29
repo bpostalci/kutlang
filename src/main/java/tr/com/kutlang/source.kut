@@ -1,0 +1,19 @@
+/*
+    @author: Berat Postalcioglu
+*/
+
+var name = "berat";
+
+fun mynameis(x)
+{
+    var cnt=0;
+    for(var i=0; i<50; i+=1)
+    {
+        print "hello";
+    }
+
+    print "called mynameis func";
+    return "berat" + " postalcioglu";
+}
+
+mynameis();
