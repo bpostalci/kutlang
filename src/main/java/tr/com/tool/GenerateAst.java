@@ -35,8 +35,9 @@ public class GenerateAst {
         defineVisitor( writer, baseName, types );
 
         for (String type : types) {
-            String className = type.split( ":" )[0].trim();
-            String fields = type.split( ":" )[1].trim();
+            String[] splittedType = type.split( ":" );
+            String className = splittedType[0].trim();
+            String fields = splittedType[1].trim();
             defineType( writer, baseName, className, fields );
         }
         writer.println();
