@@ -106,7 +106,6 @@ public class Parser {
 
     private Token consume(TokenType type, String message) {
         if (check( type )) return advance();
-
         throw error( peek(), message );
     }
 
@@ -144,10 +143,7 @@ public class Parser {
         return tokens.get( current - 1 );
     }
 
-
     private boolean isAtEnd() {
         return peek().type == EOF;
     }
-
-
 }
