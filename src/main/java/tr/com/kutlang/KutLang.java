@@ -10,7 +10,19 @@ import java.util.List;
 
 public class KutLang {
 
-    static boolean hadError = false;
+
+    static class RuntimeError extends RuntimeException {
+        final Token token;
+
+        RuntimeError(Token token, String message) {
+            super( message );
+            this.token = token;
+        }
+    }
+
+    private static final Interpreter interpreter = new Interpreter();
+    private static boolean hadError = false;
+    private static boolean hadRuntimeError = false;
 
     public static void main(String... args) throws IOException {
         if (args.length > 1) {
@@ -22,8 +34,6 @@ public class KutLang {
             runPrompt();
         }
     }
-
-    //
 
     /**
      * en: directly executes given source code
@@ -37,6 +47,7 @@ public class KutLang {
         run( new String( bytes, Charset.defaultCharset() ) );
         // Indicate an error in the exit code.
         if (hadError) System.exit( 65 );
+        if (hadRuntimeError) System.exit( 70 );
     }
 
     /**
@@ -72,7 +83,14 @@ public class KutLang {
         // Stop if there was a syntax error.
         if (hadError) return;
 
-        System.out.println( new AstPrinter().print( expression ) );
+        interpreter.interpret( expression );
+//        System.out.println( new AstPrinter().print( expression ) );
+    }
+
+    static void runtimeError(RuntimeError error) {
+        System.err.println( error.getMessage() +
+                                    "\n[line " + error.token.line + "]" );
+        hadRuntimeError = true;
     }
 
     static void error(Token token, String message) {
